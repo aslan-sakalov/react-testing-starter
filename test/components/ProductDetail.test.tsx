@@ -1,18 +1,33 @@
 import { render, screen } from "@testing-library/react";
 import ProductDetail from "../../src/components/ProductDetail";
-import { products } from "../mocks/data";
 import { http, HttpResponse } from "msw";
 import { server } from "../mocks/server";
+import { db } from "../mocks/db";
 
 describe("ProductDetail", () => {
-  it("should render the list of products", async () => {
-    render(<ProductDetail productId={1} />);
+  let productId: number;
+
+  beforeAll(() => {
+    const product = db.product.create();
+    productId = product.id;
+  });
+
+  afterAll(() => {
+    db.product.delete({ where: { id: { equals: productId } } });
+  });
+
+  it("should render product details", async () => {
+    const product = db.product.findFirst({
+      where: { id: { equals: productId } },
+    })!;
+
+    render(<ProductDetail productId={productId} />);
 
     expect(
-      await screen.findByText(new RegExp(products[0].name, "i"))
+      await screen.findByText(new RegExp(product.name, "i"))
     ).toBeInTheDocument();
     expect(
-      await screen.findByText(new RegExp(products[0].price.toString()))
+      await screen.findByText(new RegExp(product.price.toString()))
     ).toBeInTheDocument();
   });
 
@@ -30,5 +45,13 @@ describe("ProductDetail", () => {
 
     const error = await screen.findByText(/invalid productid/i);
     expect(error).toBeInTheDocument();
+  });
+
+  it("should render an error if data fetching fails", async () => {
+    server.use(http.get("/products/1", () => HttpResponse.error()));
+
+    render(<ProductDetail productId={1} />);
+
+    expect(await screen.findByText(/error/i)).toBeInTheDocument();
   });
 });

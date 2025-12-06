@@ -1,11 +1,8 @@
-import { render, screen } from "@testing-library/react";
-import { faker } from "@faker-js/faker";
+import { db } from "./mocks/db";
 
 describe("group", () => {
   it("should", () => {
-    console.log({
-      name: faker.commerce.productName(),
-      price: faker.commerce.price({ min: 1, max: 100 }),
-    });
+    const product = db.product.create({ name: "apple", price: 10 });
+    console.log(product);
   });
 });
