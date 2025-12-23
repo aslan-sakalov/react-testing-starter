@@ -1,6 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { Heading } from "@radix-ui/themes";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import ProductForm from "../../components/ProductForm";
 
@@ -14,6 +15,7 @@ const NewProductPage = withAuthenticationRequired(
         <ProductForm
           onSubmit={async (product) => {
             await axios.post("/products", product);
+            toast.success("Changes were successfully saved.");
             navigate("/admin/products");
           }}
         />

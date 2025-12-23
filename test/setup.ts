@@ -26,3 +26,12 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: vi.fn(),
   })),
 });
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+vi.mock('@auth0/auth0-react');
+
+globalThis.ResizeObserver = ResizeObserver;
+
+window.HTMLLegendElement.prototype.scrollIntoView = vi.fn();
