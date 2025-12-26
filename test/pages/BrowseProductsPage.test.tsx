@@ -8,7 +8,7 @@ import { Category, Product } from "../../src/entities";
 import BrowseProducts from "../../src/pages/BrowseProductsPage";
 import AllProviders from "../AllProviders";
 import { db, getProductsByCategory } from "../mocks/db";
-import { simulateDelay, simulateError } from "../utils";
+import { simulateDelay, simulateError } from "../utils.tsx";
 
 describe("BrowseProductsPage", () => {
   const categories: Category[] = [];

@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/vitest";
+import { PropsWithChildren, ReactNode } from "react";
 import ResizeObserver from "resize-observer-polyfill";
 import { server } from "./mocks/server";
 
@@ -11,6 +12,7 @@ globalThis.ResizeObserver = ResizeObserver;
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
 window.HTMLElement.prototype.hasPointerCapture = vi.fn();
 window.HTMLElement.prototype.releasePointerCapture = vi.fn();
+window.HTMLLegendElement.prototype.scrollIntoView = vi.fn();
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -26,12 +28,15 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: vi.fn(),
   })),
 });
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
-vi.mock('@auth0/auth0-react');
-
-globalThis.ResizeObserver = ResizeObserver;
-
-window.HTMLLegendElement.prototype.scrollIntoView = vi.fn();
+vi.mock("@auth0/auth0-react", () => {
+  return {
+    useAuth0: vi.fn().mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      user: undefined,
+    }),
+    Auth0Provider: ({ children }: PropsWithChildren) => children,
+    withAuthenticationRequired: (component: ReactNode) => component,
+  };
+});

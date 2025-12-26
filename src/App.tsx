@@ -4,7 +4,7 @@ import Providers from './providers';
 function App() {
   return (
     <Providers>
-      <Layout />
+      <Layout /> 
     </Providers>
   );
 }

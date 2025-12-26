@@ -7,7 +7,7 @@ import CategoryList from "../../src/components/CategoryList";
 import { Category } from "../../src/entities";
 import AllProviders from "../AllProviders";
 import { db } from "../mocks/db";
-import { simulateDelay, simulateError } from "../utils";
+import { simulateDelay, simulateError } from "../utils.tsx";
 
 describe("CategoryList", () => {
   const categories: Category[] = [];
